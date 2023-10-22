@@ -1,9 +1,30 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { ACTIVITEITEN_DATA } from "../api/mock_data";
 import Activiteit from "./Activiteit";
+import ActiviteitenForm from "./ActiviteitenFrom";
+import { act } from "react-dom/test-utils";
 
 const ActiviteitenLijst = () => {
   const [activiteiten, setActiviteiten] = useState(ACTIVITEITEN_DATA);
+
+  const createActiviteit = useCallback(
+    (naam: string, datum: string, beschrijving: string, prijs: number) => {
+      console.log(activiteiten);
+      const newActiviteiten = [
+        {
+          naam,
+          beschrijving,
+          prijs,
+          datum: datum,
+          id: Math.floor(Math.random() * 100) + 2,
+        },
+        ...activiteiten,
+      ];
+      console.log(newActiviteiten);
+      setActiviteiten(newActiviteiten);
+    },
+    [activiteiten]
+  );
 
   return (
     <div>
@@ -14,6 +35,7 @@ const ActiviteitenLijst = () => {
           </div>
         ))}
       </div>
+      <ActiviteitenForm onSaveActiviteit={createActiviteit} />
     </div>
   );
 };

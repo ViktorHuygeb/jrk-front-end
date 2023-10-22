@@ -18,7 +18,7 @@ const Activiteit = ({
       <h1>{naam}</h1>
       <p>{datum}</p>
       <p>{beschrijving}</p>
-      <p>Deze activiteit {prijs === 0 ? "is gratis" : "kost €" + prijs}</p>
+      <p>Deze activiteit {prijs == 0 ? "is gratis" : "kost €" + prijs}</p>
     </div>
   );
 };
