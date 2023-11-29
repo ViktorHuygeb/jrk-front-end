@@ -1,13 +1,14 @@
 import "./App.css";
-import ActiviteitenFrom from "./components/activiteiten/ActiviteitenForm";
+import LedenLijst from "./components/leden/LedenLijst";
 import ActiviteitenLijst from "./components/activiteiten/ActiviteitenLijst";
-import { ChakraProvider, Center } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 
 function App() {
   return (
     <>
       <ChakraProvider>
         <ActiviteitenLijst />
+        <LedenLijst />
       </ChakraProvider>
     </>
   );

@@ -20,9 +20,12 @@ import {
   Radio,
   RadioGroup,
   FormErrorMessage,
+  Text,
+  Box,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import { getAll } from "../../api";
+import { activiteit as activiteitType, leidingType } from "../../types";
 
 type activiteitData = {
   leidingId: string;
@@ -31,28 +34,6 @@ type activiteitData = {
   beschrijving: string;
   prijsString: string;
   moetInschrijvenString: string;
-};
-
-type activiteitType = {
-  activiteitId: number;
-  leidingId: number;
-  activiteitNaam: string;
-  datum: Date;
-  beschrijving: string;
-  prijs: number;
-  moetInschrijven: boolean;
-};
-
-type leidingType = {
-  leidingId: number;
-  voorNaam: string;
-  familieNaam: string;
-  email: string;
-  straat: string;
-  huisnummer: number;
-  postcode: number;
-  stad: string;
-  geboortedatum: Date;
 };
 
 type labelInputProps = {
@@ -130,7 +111,9 @@ function LabelInput({ label, name, type, ...rest }: labelInputProps) {
   return (
     <>
       <div className="mb-3">
-        <FormLabel htmlFor={name}>{label}</FormLabel>
+        <FormLabel htmlFor={name} marginTop="2" marginLeft="2">
+          {label}
+        </FormLabel>
         <FormControl isInvalid={hasError}>
           <Input
             {...register(name)}
@@ -139,6 +122,7 @@ function LabelInput({ label, name, type, ...rest }: labelInputProps) {
             placeholder={name}
             {...rest}
             disabled={isSubmitting}
+            marginLeft="2"
           />
           {hasError && (
             <FormErrorMessage>
@@ -230,104 +214,119 @@ export default function ActiviteitenFrom({
 
   return (
     <>
-      <h1>Voeg een activiteit toe:</h1>
+      <Text fontSize="3xl" marginLeft="2" paddingBottom="0">
+        Maak een activiteit !
+      </Text>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="w-50 mb-3">
-          <div className="mb-3">
-            <LabelInput
-              label="Naam activiteit"
-              name="activiteitNaam"
-              type="text"
-            />
-          </div>
-
-          <div className="mb-3">
-            <FormLabel htmlFor="leiding">Selecteer leiding:</FormLabel>
-            <FormControl>
-              <Controller
-                {...methods.register("leidingId")}
-                name="leidingId"
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    placeholder="Selecteer leiding"
-                    required
-                    disabled={methods.formState.isSubmitting}
-                  >
-                    {leiding.map(({ leidingId, voorNaam }: leidingType) => (
-                      <option key={leidingId} value={leidingId}>
-                        {voorNaam}
-                      </option>
-                    ))}
-                  </Select>
-                )}
+        <Box width="50%">
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-50 mb-3">
+            <div className="mb-3">
+              <LabelInput
+                label="Naam activiteit"
+                name="activiteitNaam"
+                type="text"
               />
-              <FormErrorMessage>
-                {methods.formState.errors["leidingId"] &&
-                  methods.formState.errors["leidingId"].message}
-              </FormErrorMessage>
-            </FormControl>
-          </div>
+            </div>
 
-          <div className="mb-3">
-            <LabelInput label="Datum:" name="datumString" type="date" />
-          </div>
+            <div className="mb-3">
+              <FormLabel htmlFor="leiding" marginLeft="2" marginTop="2">
+                Selecteer leiding:
+              </FormLabel>
+              <FormControl>
+                <Controller
+                  {...methods.register("leidingId")}
+                  name="leidingId"
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      placeholder="Selecteer leiding"
+                      required
+                      disabled={methods.formState.isSubmitting}
+                      marginLeft="2"
+                    >
+                      {leiding.map(({ leidingId, voorNaam }: leidingType) => (
+                        <option key={leidingId} value={leidingId}>
+                          {voorNaam}
+                        </option>
+                      ))}
+                    </Select>
+                  )}
+                />
+                <FormErrorMessage>
+                  {methods.formState.errors["leidingId"] &&
+                    methods.formState.errors["leidingId"].message}
+                </FormErrorMessage>
+              </FormControl>
+            </div>
 
-          <div className="mb-3">
-            <FormLabel htmlFor="beschrijving">Beschrijving:</FormLabel>
-            <FormControl>
-              <Textarea
-                {...methods.register("beschrijving")}
-                id="beschrijving"
-                placeholder="Voeg een beschrijving toe"
-                className="form-control"
-                disabled={methods.formState.isSubmitting}
-              />
-              <FormErrorMessage>
-                {methods.formState.errors["beschrijving"] &&
-                  methods.formState.errors["beschrijving"].message}
-              </FormErrorMessage>
-            </FormControl>
-          </div>
-          <div className="mb-3">
-            <LabelInput label="Prijs:" name="prijsString" type="number" />
-          </div>
+            <div className="mb-3">
+              <LabelInput label="Datum:" name="datumString" type="date" />
+            </div>
 
-          <div className="mb-3">
-            <FormLabel>Moet inschrijven?</FormLabel>
-            <FormControl>
-              <RadioGroup defaultValue="nee" id="moetInschrijvenString">
-                <Stack direction="row">
-                  <Radio
-                    {...methods.register("moetInschrijvenString")}
-                    value="ja"
-                    disabled={methods.formState.isSubmitting}
-                  >
-                    Ja
-                  </Radio>
-                  <Radio
-                    {...methods.register("moetInschrijvenString")}
-                    value="nee"
-                    disabled={methods.formState.isSubmitting}
-                  >
-                    Nee
-                  </Radio>
-                </Stack>
-              </RadioGroup>
-              <FormErrorMessage>
-                {methods.formState.errors["moetInschrijvenString"] &&
-                  methods.formState.errors["moetInschrijvenString"].message}
-              </FormErrorMessage>
-            </FormControl>
-          </div>
-          <Button
-            type="submit"
-            colorScheme="red"
-            isDisabled={methods.formState.isSubmitting}
-          >
-            {currentActiviteit?.activiteitId ? "Sla activiteit op" : "Voeg toe"}
-          </Button>
-        </form>
+            <div className="mb-3">
+              <FormLabel htmlFor="beschrijving" marginLeft="2" marginTop="2">
+                Beschrijving:
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  {...methods.register("beschrijving")}
+                  id="beschrijving"
+                  placeholder="Voeg een beschrijving toe"
+                  className="form-control"
+                  disabled={methods.formState.isSubmitting}
+                  marginLeft="2"
+                />
+                <FormErrorMessage>
+                  {methods.formState.errors["beschrijving"] &&
+                    methods.formState.errors["beschrijving"].message}
+                </FormErrorMessage>
+              </FormControl>
+            </div>
+            <div className="mb-3">
+              <LabelInput label="Prijs:" name="prijsString" type="number" />
+            </div>
+
+            <div className="mb-3">
+              <FormLabel marginLeft="2">
+                Moet er ingeschreven worden ?
+              </FormLabel>
+              <FormControl>
+                <RadioGroup defaultValue="nee" id="moetInschrijvenString">
+                  <Stack direction="row" marginLeft="2">
+                    <Radio
+                      {...methods.register("moetInschrijvenString")}
+                      value="ja"
+                      disabled={methods.formState.isSubmitting}
+                    >
+                      Ja
+                    </Radio>
+                    <Radio
+                      {...methods.register("moetInschrijvenString")}
+                      value="nee"
+                      disabled={methods.formState.isSubmitting}
+                    >
+                      Nee
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+                <FormErrorMessage>
+                  {methods.formState.errors["moetInschrijvenString"] &&
+                    methods.formState.errors["moetInschrijvenString"].message}
+                </FormErrorMessage>
+              </FormControl>
+            </div>
+            <Button
+              type="submit"
+              colorScheme="red"
+              isDisabled={methods.formState.isSubmitting}
+              margin="2"
+            >
+              {currentActiviteit?.activiteitId
+                ? "Sla activiteit op"
+                : "Voeg toe"}
+            </Button>
+          </form>
+        </Box>
       </FormProvider>
     </>
   );

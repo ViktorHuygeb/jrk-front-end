@@ -9,7 +9,72 @@ import {
   Text,
   Button,
   IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
+import InschrijvenModal from "./InschrijvenActiviteit";
+
+const toDateString = (date: Date) => {
+  let besteDatumString: string = "";
+  let datumString: string = new Date(date).toISOString();
+  let datumStringZonderTijd: string = datumString.substring(
+    0,
+    datumString.indexOf("T")
+  );
+  let tokens = datumStringZonderTijd.split("-");
+  for (let token in tokens.reverse()) {
+    let datumValue = tokens[token];
+    if (token === "1") {
+      datumValue = omzettenNaarMaand(datumValue);
+    }
+    besteDatumString += datumValue + " ";
+  }
+  return besteDatumString;
+};
+
+const omzettenNaarMaand = (monthNumber: string) => {
+  let monthName: string;
+  switch (monthNumber) {
+    case "01":
+      monthName = "Januari";
+      break;
+    case "02":
+      monthName = "Februari";
+      break;
+    case "03":
+      monthName = "Maart";
+      break;
+    case "04":
+      monthName = "April";
+      break;
+    case "05":
+      monthName = "Mei";
+      break;
+    case "006":
+      monthName = "Juni";
+      break;
+    case "07":
+      monthName = "Juli";
+      break;
+    case "08":
+      monthName = "Augustus";
+      break;
+    case "09":
+      monthName = "September";
+      break;
+    case "10":
+      monthName = "Oktober";
+      break;
+    case "11":
+      monthName = "November";
+      break;
+    case "12":
+      monthName = "December";
+      break;
+    default:
+      monthName = "Ongeldige maand";
+  }
+  return monthName;
+};
 
 const Activiteit = ({
   activiteitId,
@@ -32,72 +97,22 @@ const Activiteit = ({
   onDelete: (activiteitId: number) => void;
   onEdit: (activteitId: number) => void;
 }) => {
-  const toDateString = (date: Date) => {
-    let besteDatumString: string = "";
-    let datumString: string = new Date(date).toISOString();
-    let datumStringZonderTijd: string = datumString.substring(
-      0,
-      datumString.indexOf("T")
-    );
-    let tokens = datumStringZonderTijd.split("-");
-    for (let token in tokens.reverse()) {
-      let datumValue = tokens[token];
-      if (token === "1") {
-        datumValue = omzettenNaarMaand(datumValue);
-      }
-      besteDatumString += datumValue + " ";
-    }
-    return besteDatumString;
-  };
-
-  const omzettenNaarMaand = (monthNumber: string) => {
-    let monthName: string;
-    switch (monthNumber) {
-      case "01":
-        monthName = "Januari";
-        break;
-      case "02":
-        monthName = "Februari";
-        break;
-      case "03":
-        monthName = "Maart";
-        break;
-      case "04":
-        monthName = "April";
-        break;
-      case "05":
-        monthName = "Mei";
-        break;
-      case "006":
-        monthName = "Juni";
-        break;
-      case "07":
-        monthName = "Juli";
-        break;
-      case "08":
-        monthName = "Augustus";
-        break;
-      case "09":
-        monthName = "September";
-        break;
-      case "10":
-        monthName = "Oktober";
-        break;
-      case "11":
-        monthName = "November";
-        break;
-      case "12":
-        monthName = "December";
-        break;
-      default:
-        monthName = "Ongeldige maand";
-    }
-    return monthName;
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   function inschrijvingsKnop(inschrijven: boolean) {
     if (inschrijven) {
-      return <Button colorScheme="red">Inschrijven</Button>;
+      return (
+        <>
+          <Button colorScheme="red" onClick={onOpen}>
+            Inschrijven
+          </Button>
+          <InschrijvenModal
+            isOpen={isOpen}
+            onClose={onClose}
+            activiteitId={activiteitId}
+          />
+        </>
+      );
     }
   }
 

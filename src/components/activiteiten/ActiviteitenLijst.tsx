@@ -1,21 +1,12 @@
 import { useCallback, useState } from "react";
 import Activiteit from "./Activiteit";
+import { activiteit } from "../../types";
 import ActiviteitenForm from "./ActiviteitenForm";
 import { SimpleGrid } from "@chakra-ui/react";
 import AsyncData from "../AyncData";
 import useSWR from "swr";
 import { getAll, deleteById } from "../../api";
 import useSWRMutation from "swr/mutation";
-
-type activiteit = {
-  activiteitId: number;
-  leidingId: number;
-  activiteitNaam: string;
-  datum: Date;
-  beschrijving: string;
-  prijs: number;
-  moetInschrijven: boolean;
-};
 
 const ActiviteitenLijst = () => {
   const {
@@ -102,10 +93,10 @@ const ActiviteitenLijst = () => {
         ) : null}
       </AsyncData>
 
-      <ActiviteitenForm
+      {/* <ActiviteitenForm
         setActiviteitToUpdate={setActiviteitToUpdate}
         currentActiviteit={currentActiviteit}
-      />
+      /> */}
     </>
   );
 };
