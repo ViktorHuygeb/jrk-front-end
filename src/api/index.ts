@@ -15,11 +15,19 @@ export const deleteById = async (
   await axios.delete(`${baseURL}/${url}/${id}`);
 };
 
+export const deleteInschrijvingById = async (
+  url: string,
+  { arg }: { arg: { idLid: number; idAct: number } }
+) => {
+  const lidId = arg.idLid;
+  const actId = arg.idAct;
+  await axios.delete(`${baseURL}/${url}/${lidId}/${actId}`);
+};
+
 export const save = async (
   url: string,
   { arg }: { arg: { id?: number; body: any } }
 ) => {
-  console.log(arg.id);
   await axios({
     method: arg.id ? "PUT" : "POST",
     url: `${baseURL}/${url}/${arg.id ?? ""}`,

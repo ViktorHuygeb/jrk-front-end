@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { getAll } from "../../api";
 import { save } from "../../api";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
@@ -19,7 +19,7 @@ import {
   Center,
   FormControl,
 } from "@chakra-ui/react";
-import { lidType } from "../../types";
+import { inschrijvingType, lidType } from "../../types";
 
 type InschrijvingenType = {
   ingeschrevenLidId: number[];
@@ -39,12 +39,18 @@ export default function InschrijvenModal({
     save
   );
   const { data: leden = [], isLoading, error } = useSWR("lid", getAll);
+  const { data: inschrijvingen = [] } = useSWR("ingeschrevenleden", getAll);
 
   const methods = useForm<InschrijvingenType>();
 
+  const ingeschrevenLeden = useMemo(() => {
+    return inschrijvingen
+      .filter((i: inschrijvingType) => i.activiteitId === activiteitId)
+      .map((i: inschrijvingType) => i.lidId);
+  }, [inschrijvingen, activiteitId]);
+
   const onSubmit: SubmitHandler<InschrijvingenType> = useCallback(
     async (data) => {
-      console.log(data.ingeschrevenLidId);
       data.ingeschrevenLidId.forEach(async (lidId: number) => {
         await saveInschrijving({
           body: {
@@ -60,7 +66,7 @@ export default function InschrijvenModal({
 
   return (
     <Center>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader paddingBottom="0">Inschrijven</ModalHeader>
@@ -84,9 +90,13 @@ export default function InschrijvenModal({
                           return (
                             <Checkbox
                               colorScheme="red"
-                              key={lid.ouderId}
+                              key={lid.lidId}
                               {...methods.register("ingeschrevenLidId")}
                               value={lid.lidId}
+                              defaultChecked={ingeschrevenLeden.includes(
+                                lid.lidId
+                              )}
+                              isDisabled={ingeschrevenLeden.includes(lid.lidId)}
                             >
                               {lid.voorNaam}
                             </Checkbox>

@@ -2,6 +2,7 @@ export type lidType = {
   lidId: number;
   ouderId: number;
   geboortedatum: Date;
+  magFotos: boolean;
   voorNaam: string;
   familieNaam: string;
 };
@@ -33,6 +34,7 @@ export type ouderType = {
   voorNaam: string;
   familieNaam: string;
   email: string;
+  telefoonNummer: string;
   straat: string;
   huisnummer: number;
   postcode: number;

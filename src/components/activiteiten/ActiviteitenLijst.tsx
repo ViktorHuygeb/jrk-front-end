@@ -35,33 +35,6 @@ const ActiviteitenLijst = () => {
     deleteById
   );
 
-  type FormData = {
-    naam: string;
-    datum: Date;
-    beschrijving: string;
-    prijs: number;
-  };
-
-  // const createActiviteit = useCallback(
-  //   (data: FormData) => {
-  //     console.log(activiteiten);
-  //     const { naam, beschrijving, prijs, datum } = data;
-  //     const newActiviteiten = [
-  //       {
-  //         naam,
-  //         beschrijving,
-  //         prijs,
-  //         datum: toDateString(datum),
-  //         id: Math.floor(Math.random() * 100) + 2,
-  //       },
-  //       ...activiteiten,
-  //     ];
-  //     console.log(newActiviteiten);
-  //     setActiviteiten(newActiviteiten);
-  //   },
-  //   [activiteiten]
-  // );
-
   return (
     <>
       <AsyncData
@@ -93,10 +66,12 @@ const ActiviteitenLijst = () => {
         ) : null}
       </AsyncData>
 
-      {/* <ActiviteitenForm
-        setActiviteitToUpdate={setActiviteitToUpdate}
-        currentActiviteit={currentActiviteit}
-      /> */}
+      {
+        <ActiviteitenForm
+          setActiviteitToUpdate={setActiviteitToUpdate}
+          currentActiviteit={currentActiviteit}
+        />
+      }
     </>
   );
 };

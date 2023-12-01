@@ -10,8 +10,15 @@ import {
   Button,
   IconButton,
   useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  FocusLock,
+  PopoverArrow,
+  PopoverCloseButton,
 } from "@chakra-ui/react";
 import InschrijvenModal from "./InschrijvenActiviteit";
+import DeletePopover from "../deletePopover";
 
 const toDateString = (date: Date) => {
   let besteDatumString: string = "";
@@ -103,7 +110,7 @@ const Activiteit = ({
     if (inschrijven) {
       return (
         <>
-          <Button colorScheme="red" onClick={onOpen}>
+          <Button colorScheme="red" onClick={onOpen} marginRight="-2">
             Inschrijven
           </Button>
           <InschrijvenModal
@@ -129,7 +136,9 @@ const Activiteit = ({
       <CardHeader paddingTop="3" paddingBottom="0">
         <Stack spacing="2">
           <Box alignSelf="center">
-            <Heading size="md">{activiteitNaam}</Heading>
+            <Heading size="md">
+              {leidingId}: {activiteitNaam}
+            </Heading>
           </Box>
           <Box alignSelf="center">
             <Heading size="s">{toDateString(datum)}</Heading>
@@ -151,17 +160,17 @@ const Activiteit = ({
         </Stack>
       </CardBody>
       <CardFooter>
-        <Stack direction="row" spacing="3">
-          <IconButton
-            aria-label="Verwijder activiteit"
-            icon={<MdDelete />}
-            onClick={handleDelete}
-          />
-          {inschrijvingsKnop(moetInschrijven)}
+        <Stack direction="row" spacing="2">
           <IconButton
             aria-label="Wijzig activiteit"
             icon={<MdEdit />}
             onClick={handleEdit}
+          />
+          {inschrijvingsKnop(moetInschrijven)}
+          <DeletePopover
+            ariaLabel="Verwijder activiteit"
+            teVerwijderen="activiteit"
+            handleDelete={handleDelete}
           />
         </Stack>
       </CardFooter>

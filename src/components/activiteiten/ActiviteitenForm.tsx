@@ -1,8 +1,7 @@
-import { memo, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   useForm,
   SubmitHandler,
-  Controller,
   FormProvider,
   useFormContext,
   Resolver,
@@ -26,6 +25,7 @@ import {
 import useSWR from "swr";
 import { getAll } from "../../api";
 import { activiteit as activiteitType, leidingType } from "../../types";
+import Error from "../Error";
 
 type activiteitData = {
   leidingId: string;
@@ -161,7 +161,6 @@ export default function ActiviteitenFrom({
         moetInschrijvenString,
       } = data;
       const moetInschrijven = moetInschrijvenString === "ja" ? true : false;
-      console.log(currentActiviteit);
       await saveActiviteit({
         id: currentActiviteit?.activiteitId,
         body: {
@@ -217,6 +216,7 @@ export default function ActiviteitenFrom({
       <Text fontSize="3xl" marginLeft="2" paddingBottom="0">
         Maak een activiteit !
       </Text>
+      <Error error={saveError} />
       <FormProvider {...methods}>
         <Box width="50%">
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-50 mb-3">
@@ -233,25 +233,21 @@ export default function ActiviteitenFrom({
                 Selecteer leiding:
               </FormLabel>
               <FormControl>
-                <Controller
+                <Select
                   {...methods.register("leidingId")}
                   name="leidingId"
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      placeholder="Selecteer leiding"
-                      required
-                      disabled={methods.formState.isSubmitting}
-                      marginLeft="2"
-                    >
-                      {leiding.map(({ leidingId, voorNaam }: leidingType) => (
-                        <option key={leidingId} value={leidingId}>
-                          {voorNaam}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                />
+                  placeholder="Selecteer leiding"
+                  required
+                  disabled={methods.formState.isSubmitting}
+                  marginLeft="2"
+                  as="select"
+                >
+                  {leiding.map(({ leidingId, voorNaam }: leidingType) => (
+                    <option key={leidingId} value={leidingId}>
+                      {voorNaam}
+                    </option>
+                  ))}
+                </Select>
                 <FormErrorMessage>
                   {methods.formState.errors["leidingId"] &&
                     methods.formState.errors["leidingId"].message}
