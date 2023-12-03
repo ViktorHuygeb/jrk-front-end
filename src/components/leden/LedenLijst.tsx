@@ -1,7 +1,7 @@
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, memo } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import { deleteInschrijvingById, getAll } from "../../api";
+import { deleteById, deleteInschrijvingById, getAll } from "../../api";
 import AsyncData from "../AyncData";
 import {
   Table,
@@ -21,8 +21,16 @@ import Lid from "./Lid";
 
 export default function LedenLijst() {
   const { data: leden = [], isLoading, error } = useSWR("lid", getAll);
-  const { data: activiteiten = [] } = useSWR("activiteiten", getAll);
-  const { data: inschrijvingen = [] } = useSWR("ingeschrevenleden", getAll);
+  const {
+    data: activiteiten = [],
+    isLoading: isLoadingAct,
+    error: errorAct,
+  } = useSWR("activiteiten", getAll);
+  const {
+    data: inschrijvingen = [],
+    isLoading: isLoadingIns,
+    error: errorIns,
+  } = useSWR("ingeschrevenleden", getAll);
   const { trigger: deleteInschrijving, error: deleteError } = useSWRMutation(
     "ingeschrevenleden",
     deleteInschrijvingById
@@ -108,7 +116,10 @@ export default function LedenLijst() {
         </Stack>
       </Box>
       <Box width="65%">
-        <AsyncData loading={isLoading} error={error}>
+        <AsyncData
+          loading={isLoading || isLoadingAct || isLoadingIns}
+          error={error || errorAct || errorIns}
+        >
           <Table>
             <Thead>
               <Tr>

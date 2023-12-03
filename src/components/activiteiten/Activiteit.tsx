@@ -1,5 +1,5 @@
 import { memo, useCallback } from "react";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/card";
 import {
   Stack,
@@ -10,15 +10,15 @@ import {
   Button,
   IconButton,
   useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  FocusLock,
-  PopoverArrow,
-  PopoverCloseButton,
 } from "@chakra-ui/react";
 import InschrijvenModal from "./InschrijvenActiviteit";
 import DeletePopover from "../deletePopover";
+import { activiteit } from "../../types";
+
+type activiteitType = activiteit & {
+  onDelete: (activiteitId: number) => void;
+  onEdit: (activteitId: number) => void;
+};
 
 const toDateString = (date: Date) => {
   let besteDatumString: string = "";
@@ -88,22 +88,11 @@ const Activiteit = ({
   activiteitNaam,
   beschrijving,
   datum,
-  leidingId,
   moetInschrijven,
   prijs,
   onDelete,
   onEdit,
-}: {
-  activiteitId: number;
-  activiteitNaam: string;
-  beschrijving: string;
-  datum: Date;
-  leidingId: number;
-  moetInschrijven: boolean;
-  prijs: number;
-  onDelete: (activiteitId: number) => void;
-  onEdit: (activteitId: number) => void;
-}) => {
+}: activiteitType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   function inschrijvingsKnop(inschrijven: boolean) {
@@ -132,13 +121,11 @@ const Activiteit = ({
   }, [activiteitId, onEdit]);
 
   return (
-    <Card variant="outline" alignItems="center" maxH="500px">
+    <Card variant="outline" alignItems="center" maxH="500px" borderRadius="md">
       <CardHeader paddingTop="3" paddingBottom="0">
         <Stack spacing="2">
           <Box alignSelf="center">
-            <Heading size="md">
-              {leidingId}: {activiteitNaam}
-            </Heading>
+            <Heading size="md">{activiteitNaam}</Heading>
           </Box>
           <Box alignSelf="center">
             <Heading size="s">{toDateString(datum)}</Heading>

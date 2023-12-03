@@ -48,43 +48,49 @@ const resolver: Resolver<activiteitData> = async (values) => {
 
   if (!values.activiteitNaam) {
     errors.activiteitNaam = {
-      required: "Activiteitnaam is verplicht!",
-      minLength: {
-        value: 2,
-        message: "De naam moet minstens 2 tekens lang zijn!",
-      },
+      message: "Activiteitnaam is verplicht!",
+    };
+  } else if (values.activiteitNaam.length < 2) {
+    errors.activiteitNaam = {
+      message: "De naam moet minstens 2 tekens lang zijn!",
     };
   }
 
   if (!values.leidingId) {
     errors.leiding = {
-      required: "Leiding is verplicht!",
+      message: "Leiding is verplicht!",
     };
   }
 
   if (!values.datumString) {
     errors.datumString = {
-      required: "Datum is verplicht!",
+      message: "Datum is verplicht!",
+    };
+  } else if (new Date(values.datumString) < new Date(Date())) {
+    errors.datumString = {
+      message: "De datumString moet later dan vandaag zijn !",
     };
   }
-  // } else if (new Date(values.datumString) < new Date(Date())) {
-  //   errors.datumString = {
-  //     min: { message: "De datumString moet later dan vandaag zijn !" },
-  //   };
-  // }
   if (!values.beschrijving) {
     errors.beschrijving = {
-      required: "Beschrijving is verplicht!",
+      message: "Beschrijving is verplicht!",
     };
   }
 
   if (values.prijsString === undefined || values.prijsString === null) {
     errors.prijsString = {
-      required: "Prijs is verplicht! Geef 0 in indien gratis!",
+      messsage: "Prijs is verplicht! Geef 0 in indien gratis!",
     };
-  } else if (parseFloat(values.prijsString) < 0) {
+  } else if (
+    parseFloat(values.prijsString) < 0 ||
+    parseFloat(values.prijsString) > 50
+  ) {
     errors.prijsString = {
-      min: { value: 0, message: "Minimum 0" },
+      message: "De prijs moet tussen 0 en 50 euro liggen !",
+    };
+  } else if (parseFloat(values.prijsString) > 50) {
+    errors.prijsstring = {
+      max: { value: 50, message: "Maximum 50" },
     };
   }
 
@@ -125,8 +131,8 @@ function LabelInput({ label, name, type, ...rest }: labelInputProps) {
             marginLeft="2"
           />
           {hasError && (
-            <FormErrorMessage>
-              {/* {errors[name]?.message && errors[name]?.message} */}
+            <FormErrorMessage paddingLeft="2">
+              {errors[name]?.message && errors[name]?.message?.toString()}
             </FormErrorMessage>
           )}
         </FormControl>
@@ -248,7 +254,7 @@ export default function ActiviteitenFrom({
                     </option>
                   ))}
                 </Select>
-                <FormErrorMessage>
+                <FormErrorMessage paddingLeft="2">
                   {methods.formState.errors["leidingId"] &&
                     methods.formState.errors["leidingId"].message}
                 </FormErrorMessage>
@@ -272,7 +278,7 @@ export default function ActiviteitenFrom({
                   disabled={methods.formState.isSubmitting}
                   marginLeft="2"
                 />
-                <FormErrorMessage>
+                <FormErrorMessage paddingLeft="2">
                   {methods.formState.errors["beschrijving"] &&
                     methods.formState.errors["beschrijving"].message}
                 </FormErrorMessage>
@@ -305,7 +311,7 @@ export default function ActiviteitenFrom({
                     </Radio>
                   </Stack>
                 </RadioGroup>
-                <FormErrorMessage>
+                <FormErrorMessage paddingLeft="2">
                   {methods.formState.errors["moetInschrijvenString"] &&
                     methods.formState.errors["moetInschrijvenString"].message}
                 </FormErrorMessage>
