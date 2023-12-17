@@ -10,7 +10,8 @@ export default function LeidingLijst() {
   return (
     <SimpleGrid
       spacing={3}
-      templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+      justifyContent={"center"}
+      templateColumns="repeat(4, 350px)"
       padding="20px"
     >
       {leiding.map((l: leidingType) => {

@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "activiteitId": 1,
+      "activiteitNaam": "Test activiteit",
+      "beschrijving": "Test beschrijving",
+      "datum": "2024-05-05T00:00:00.000Z",
+      "leidingId": 1,
+      "moetInschrijven": true,
+      "prijs": 2
+    }
+  ],
+  "count": 1
+}

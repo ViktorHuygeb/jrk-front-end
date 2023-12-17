@@ -20,6 +20,7 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import { inschrijvingType, lidType } from "../../types";
+import Error from "../Error";
 
 type InschrijvingenType = {
   ingeschrevenLidId: number[];
@@ -78,6 +79,7 @@ export default function InschrijvenModal({
                 onSubmit={methods.handleSubmit(onSubmit)}
                 id="inschrijvingsForm"
               >
+                <Error error={error || saveError} />
                 <FormControl>
                   <div>
                     <Stack
@@ -97,6 +99,7 @@ export default function InschrijvenModal({
                                 lid.lidId
                               )}
                               isDisabled={ingeschrevenLeden.includes(lid.lidId)}
+                              data-cy={`inschrijven_${lid.voorNaam}`}
                             >
                               {lid.voorNaam}
                             </Checkbox>
@@ -117,6 +120,7 @@ export default function InschrijvenModal({
               type="submit"
               form="inschrijvingsForm"
               onClick={onClose}
+              data-cy="bevestig_inschrijven"
             >
               Inschrijven
             </Button>

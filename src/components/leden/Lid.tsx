@@ -34,17 +34,17 @@ export default function Lid({
   }, [lidId, activiteitId, onDelete]);
 
   return (
-    <Tr>
-      <Td>{voorNaam}</Td>
-      <Td>{familieNaam}</Td>
-      <Td>{toDateOutputString(geboortedatum)}</Td>
-      <Td>{magFotos ? "Ja" : "Nee"}</Td>
-      <Td>
+    <Tr data-cy="lid">
+      <Td data-cy="lid_voorNaam">{voorNaam}</Td>
+      <Td data-cy="lid_familieNaam">{familieNaam}</Td>
+      <Td data-cy="lid_geboortedatum">{toDateOutputString(geboortedatum)}</Td>
+      <Td data-cy="lid_fotos">{magFotos ? "Ja" : "Nee"}</Td>
+      <Td data-cy="lid_ouder_email">
         {ouders
           .filter((ouder: ouderType) => ouderId === ouder.ouderId)
           .map((ouder: ouderType) => ouder.email)}
       </Td>
-      <Td>
+      <Td data-cy="lid_ouder_telefoonNummer">
         {ouders
           .filter((ouder: ouderType) => ouderId === ouder.ouderId)
           .map((ouder: ouderType) => ouder.telefoonNummer)}
@@ -55,6 +55,7 @@ export default function Lid({
             teVerwijderen="inschrijving"
             ariaLabel="Verwijder inschrijving"
             handleDelete={handleDelete}
+            cy_data="verwijder_inschrijving"
           />
         </Td>
       )}

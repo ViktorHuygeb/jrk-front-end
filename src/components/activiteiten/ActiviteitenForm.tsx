@@ -9,7 +9,6 @@ import {
 import useSWRMutation from "swr/mutation";
 import { save } from "../../api";
 import {
-  Button,
   FormLabel,
   Input,
   Select,
@@ -19,7 +18,6 @@ import {
   Radio,
   RadioGroup,
   FormErrorMessage,
-  Text,
   Box,
 } from "@chakra-ui/react";
 import useSWR from "swr";
@@ -68,16 +66,17 @@ const resolver: Resolver<activiteitData> = async (values) => {
     };
   } else if (new Date(values.datumString) < new Date(Date())) {
     errors.datumString = {
-      message: "De datumString moet later dan vandaag zijn !",
+      message: "De datum moet later dan vandaag zijn!",
     };
   }
+
   if (!values.beschrijving) {
     errors.beschrijving = {
       message: "Beschrijving is verplicht!",
     };
   }
 
-  if (values.prijsString === undefined || values.prijsString === null) {
+  if (values.prijsString === "") {
     errors.prijsString = {
       messsage: "Prijs is verplicht! Geef 0 in indien gratis!",
     };
@@ -117,7 +116,7 @@ function LabelInput({ label, name, type, ...rest }: labelInputProps) {
   return (
     <>
       <div className="mb-3">
-        <FormLabel htmlFor={name} marginTop="2" marginLeft="2">
+        <FormLabel marginTop="2" htmlFor={name}>
           {label}
         </FormLabel>
         <FormControl isInvalid={hasError}>
@@ -128,10 +127,9 @@ function LabelInput({ label, name, type, ...rest }: labelInputProps) {
             placeholder={name}
             {...rest}
             disabled={isSubmitting}
-            marginLeft="2"
           />
           {hasError && (
-            <FormErrorMessage paddingLeft="2">
+            <FormErrorMessage data-cy={`${name}_error`}>
               {errors[name]?.message && errors[name]?.message?.toString()}
             </FormErrorMessage>
           )}
@@ -144,9 +142,11 @@ function LabelInput({ label, name, type, ...rest }: labelInputProps) {
 export default function ActiviteitenFrom({
   currentActiviteit,
   setActiviteitToUpdate,
+  onSucces,
 }: {
   currentActiviteit: activiteitType | undefined;
   setActiviteitToUpdate: (activteitId: number | null) => void;
+  onSucces: () => void;
 }) {
   const { trigger: saveActiviteit, error: saveError } = useSWRMutation(
     "activiteiten",
@@ -179,10 +179,11 @@ export default function ActiviteitenFrom({
           moetInschrijven: moetInschrijven,
         },
       });
+      onSucces();
       setActiviteitToUpdate(null);
       methods.reset();
     },
-    [methods.reset, saveActiviteit, currentActiviteit]
+    [methods.reset, saveActiviteit, currentActiviteit, onSucces]
   );
 
   useEffect(() => {
@@ -219,34 +220,35 @@ export default function ActiviteitenFrom({
 
   return (
     <>
-      <Text fontSize="3xl" marginLeft="2" paddingBottom="0">
-        Maak een activiteit !
-      </Text>
       <Error error={saveError} />
       <FormProvider {...methods}>
-        <Box width="50%">
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-50 mb-3">
+        <Box width="95%" alignSelf={"center"}>
+          <form
+            onSubmit={methods.handleSubmit(onSubmit)}
+            className="w-50 mb-3"
+            id="activiteitenform"
+          >
             <div className="mb-3">
               <LabelInput
                 label="Naam activiteit"
                 name="activiteitNaam"
                 type="text"
+                data-cy="activiteit_input"
               />
             </div>
 
             <div className="mb-3">
-              <FormLabel htmlFor="leiding" marginLeft="2" marginTop="2">
+              <FormLabel htmlFor="leiding" marginTop="2">
                 Selecteer leiding:
               </FormLabel>
-              <FormControl>
+              <FormControl isInvalid={"leidingId" in methods.formState.errors}>
                 <Select
                   {...methods.register("leidingId")}
                   name="leidingId"
                   placeholder="Selecteer leiding"
                   required
                   disabled={methods.formState.isSubmitting}
-                  marginLeft="2"
-                  as="select"
+                  data-cy="leiding_input"
                 >
                   {leiding.map(({ leidingId, voorNaam }: leidingType) => (
                     <option key={leidingId} value={leidingId}>
@@ -254,44 +256,59 @@ export default function ActiviteitenFrom({
                     </option>
                   ))}
                 </Select>
-                <FormErrorMessage paddingLeft="2">
-                  {methods.formState.errors["leidingId"] &&
-                    methods.formState.errors["leidingId"].message}
-                </FormErrorMessage>
+                {"leidingId" in methods.formState.errors && (
+                  <FormErrorMessage>
+                    {methods.formState.errors["leidingId"] &&
+                      methods.formState.errors["leidingId"].message}
+                  </FormErrorMessage>
+                )}
               </FormControl>
             </div>
 
             <div className="mb-3">
-              <LabelInput label="Datum:" name="datumString" type="date" />
+              <LabelInput
+                label="Datum:"
+                name="datumString"
+                type="date"
+                data-cy="datum_input"
+              />
             </div>
 
             <div className="mb-3">
-              <FormLabel htmlFor="beschrijving" marginLeft="2" marginTop="2">
+              <FormLabel htmlFor="beschrijving" marginTop="2">
                 Beschrijving:
               </FormLabel>
-              <FormControl>
+              <FormControl
+                isInvalid={"beschrijving" in methods.formState.errors}
+              >
                 <Textarea
                   {...methods.register("beschrijving")}
                   id="beschrijving"
+                  name="beschrijving"
                   placeholder="Voeg een beschrijving toe"
                   className="form-control"
                   disabled={methods.formState.isSubmitting}
-                  marginLeft="2"
+                  data-cy="beschrijving_input"
                 />
-                <FormErrorMessage paddingLeft="2">
-                  {methods.formState.errors["beschrijving"] &&
-                    methods.formState.errors["beschrijving"].message}
-                </FormErrorMessage>
+                {"beschrijving" in methods.formState.errors && (
+                  <FormErrorMessage data-cy="beschrijving_error">
+                    {methods.formState.errors["beschrijving"] &&
+                      methods.formState.errors["beschrijving"].message}
+                  </FormErrorMessage>
+                )}
               </FormControl>
             </div>
             <div className="mb-3">
-              <LabelInput label="Prijs:" name="prijsString" type="number" />
+              <LabelInput
+                label="Prijs:"
+                name="prijsString"
+                type="number"
+                data-cy="prijs_input"
+              />
             </div>
 
             <div className="mb-3">
-              <FormLabel marginLeft="2">
-                Moet er ingeschreven worden ?
-              </FormLabel>
+              <FormLabel marginTop="2">Moet er ingeschreven worden ?</FormLabel>
               <FormControl>
                 <RadioGroup defaultValue="nee" id="moetInschrijvenString">
                   <Stack direction="row" marginLeft="2">
@@ -299,6 +316,7 @@ export default function ActiviteitenFrom({
                       {...methods.register("moetInschrijvenString")}
                       value="ja"
                       disabled={methods.formState.isSubmitting}
+                      data-cy="moetInschrijven_ja"
                     >
                       Ja
                     </Radio>
@@ -306,6 +324,7 @@ export default function ActiviteitenFrom({
                       {...methods.register("moetInschrijvenString")}
                       value="nee"
                       disabled={methods.formState.isSubmitting}
+                      data-cy="moetInschrijven_nee"
                     >
                       Nee
                     </Radio>
@@ -317,16 +336,6 @@ export default function ActiviteitenFrom({
                 </FormErrorMessage>
               </FormControl>
             </div>
-            <Button
-              type="submit"
-              colorScheme="red"
-              isDisabled={methods.formState.isSubmitting}
-              margin="2"
-            >
-              {currentActiviteit?.activiteitId
-                ? "Sla activiteit op"
-                : "Voeg toe"}
-            </Button>
           </form>
         </Box>
       </FormProvider>

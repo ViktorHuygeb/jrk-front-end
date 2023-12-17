@@ -4,7 +4,6 @@ import { Box } from "@chakra-ui/react";
 import { memo } from "react";
 
 const Leiding = ({
-  leidingId,
   voorNaam,
   familieNaam,
 }: {
@@ -13,10 +12,10 @@ const Leiding = ({
   familieNaam: string;
 }) => {
   return (
-    <Card maxW="sm" borderRadius="lg" margin="2">
+    <Card maxW="sm" borderRadius="lg" margin="2" w="100%" data-cy="leiding">
       <CardBody>
         <Box
-          boxSize="325px"
+          boxSize="310px"
           height="225px"
           borderRadius="md"
           overflow="hidden"
@@ -36,6 +35,7 @@ const Leiding = ({
           textAlign="center"
           paddingTop="3"
           size="md"
+          data-cy="leiding_naam"
         >{`${voorNaam} ${familieNaam}`}</Heading>
       </CardBody>
     </Card>

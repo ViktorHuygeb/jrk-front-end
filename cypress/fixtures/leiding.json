@@ -1,0 +1,27 @@
+{
+  "items": [
+    {
+      "leidingId": 1,
+      "voorNaam": "Viktor",
+      "familieNaam": "Huygebaert",
+      "email": "viktorhuygebaert04@gmail.com",
+      "straat": "Kerkstraat",
+      "huisnummer": "1",
+      "postcode": "9990",
+      "gemeente": "Maldegem",
+      "geboortedatum": "2004-04-04"
+    },
+    {
+      "leidingId": 2,
+      "voorNaam": "Jasper",
+      "familieNaam": "De Coninck",
+      "email": "jasper@gmail.com",
+      "straat": "Kerkstraat",
+      "huisnummer": "1",
+      "postcode": "9990",
+      "gemeente": "Maldegem",
+      "geboortedatum": "2004-04-05"
+    }
+  ],
+  "count": 2
+}

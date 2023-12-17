@@ -1,7 +1,7 @@
-import { useMemo, useCallback, useState, memo } from "react";
+import { useMemo, useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import { deleteById, deleteInschrijvingById, getAll } from "../../api";
+import { deleteInschrijvingById, getAll } from "../../api";
 import AsyncData from "../AyncData";
 import {
   Table,
@@ -12,10 +12,8 @@ import {
   Tbody,
   Box,
   Select,
-  IconButton,
   Stack,
 } from "@chakra-ui/react";
-import { FaSearch } from "react-icons/fa";
 import { activiteit, inschrijvingType, lidType } from "../../types";
 import Lid from "./Lid";
 
@@ -90,10 +88,16 @@ export default function LedenLijst() {
   };
 
   return (
-    <>
-      <Box marginLeft="2" width="200px">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Box width="200px">
         <Stack direction={"row"}>
           <Select
+            data-cy="filter_input"
             onChange={(e: any) => {
               if (activiteitenMetInschrijving.length == 0) {
                 setFilter(-1);
@@ -112,10 +116,9 @@ export default function LedenLijst() {
               </option>
             ))}
           </Select>
-          <IconButton aria-label="Zoek leden" icon={<FaSearch />} />
         </Stack>
       </Box>
-      <Box width="65%">
+      <Box width="70%">
         <AsyncData
           loading={isLoading || isLoadingAct || isLoadingIns}
           error={error || errorAct || errorIns}
@@ -132,10 +135,10 @@ export default function LedenLijst() {
                 <Th></Th>
               </Tr>
             </Thead>
-            <Tbody>{ledenRij()}</Tbody>
+            <Tbody data-cy="inschrijving">{ledenRij()}</Tbody>
           </Table>
         </AsyncData>
       </Box>
-    </>
+    </Box>
   );
 }

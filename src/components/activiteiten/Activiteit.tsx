@@ -14,10 +14,12 @@ import {
 import InschrijvenModal from "./InschrijvenActiviteit";
 import DeletePopover from "../deletePopover";
 import { activiteit } from "../../types";
+import FormModal from "./FormModal";
 
 type activiteitType = activiteit & {
   onDelete: (activiteitId: number) => void;
   onEdit: (activteitId: number) => void;
+  setActiviteitToUpdate: (actiteitId: number | null) => void;
 };
 
 const toDateString = (date: Date) => {
@@ -85,26 +87,41 @@ const omzettenNaarMaand = (monthNumber: string) => {
 
 const Activiteit = ({
   activiteitId,
+  leidingId,
   activiteitNaam,
   beschrijving,
   datum,
   moetInschrijven,
   prijs,
   onDelete,
-  onEdit,
+  setActiviteitToUpdate,
 }: activiteitType) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenInschrijving,
+    onOpen: onOpenInschrijving,
+    onClose: onCloseInschrijving,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEdit,
+    onOpen: onOpenEdit,
+    onClose: onCloseEdit,
+  } = useDisclosure();
 
   function inschrijvingsKnop(inschrijven: boolean) {
     if (inschrijven) {
       return (
         <>
-          <Button colorScheme="red" onClick={onOpen} marginRight="-2">
+          <Button
+            colorScheme="red"
+            onClick={onOpenInschrijving}
+            marginRight="-2"
+            data-cy="inschrijven_activiteit"
+          >
             Inschrijven
           </Button>
           <InschrijvenModal
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={isOpenInschrijving}
+            onClose={onCloseInschrijving}
             activiteitId={activiteitId}
           />
         </>
@@ -116,31 +133,48 @@ const Activiteit = ({
     onDelete(activiteitId);
   }, [activiteitId, onDelete]);
 
-  const handleEdit = useCallback(() => {
-    onEdit(activiteitId);
-  }, [activiteitId, onEdit]);
-
   return (
-    <Card variant="outline" alignItems="center" maxH="500px" borderRadius="md">
+    <Card
+      variant="outline"
+      alignItems="center"
+      maxH="500px"
+      borderRadius="md"
+      minH="350px"
+      data-cy="activiteit"
+    >
       <CardHeader paddingTop="3" paddingBottom="0">
         <Stack spacing="2">
           <Box alignSelf="center">
-            <Heading size="md">{activiteitNaam}</Heading>
+            <Heading size="md" data-cy="activiteit_naam">
+              {activiteitNaam}
+            </Heading>
           </Box>
           <Box alignSelf="center">
-            <Heading size="s">{toDateString(datum)}</Heading>
+            <Heading size="s" data-cy="activiteit_datum">
+              {toDateString(datum)}
+            </Heading>
           </Box>
         </Stack>
       </CardHeader>
       <CardBody padding="2" paddingLeft="4" paddingRight="4">
         <Stack divider={<StackDivider />}>
           <Box>
-            <Text pt="2" fontSize="sm" paddingBottom="1">
+            <Text
+              pt="2"
+              fontSize="sm"
+              paddingBottom="1"
+              data-cy="activiteit_beschrijving"
+            >
               {beschrijving}
             </Text>
           </Box>
           <Box paddingTop="0">
-            <Text pt="2" fontSize="sm" paddingTop="0">
+            <Text
+              pt="2"
+              fontSize="sm"
+              paddingTop="0"
+              data-cy="activiteit_prijs"
+            >
               Deze activiteit {prijs == 0 ? "is gratis" : "kost €" + prijs}
             </Text>
           </Box>
@@ -151,13 +185,30 @@ const Activiteit = ({
           <IconButton
             aria-label="Wijzig activiteit"
             icon={<MdEdit />}
-            onClick={handleEdit}
+            onClick={onOpenEdit}
+            marginRight="-2"
+          />
+          <FormModal
+            isOpen={isOpenEdit}
+            onClose={onCloseEdit}
+            type="Bewerk"
+            setActiviteitToUpdate={setActiviteitToUpdate}
+            currentActiviteit={{
+              leidingId,
+              activiteitId,
+              activiteitNaam,
+              beschrijving,
+              prijs,
+              moetInschrijven,
+              datum,
+            }}
           />
           {inschrijvingsKnop(moetInschrijven)}
           <DeletePopover
             ariaLabel="Verwijder activiteit"
             teVerwijderen="activiteit"
             handleDelete={handleDelete}
+            cy_data="verwijder_activiteit"
           />
         </Stack>
       </CardFooter>

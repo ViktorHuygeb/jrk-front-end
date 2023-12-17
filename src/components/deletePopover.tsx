@@ -16,10 +16,12 @@ export default function DeletePopover({
   teVerwijderen,
   handleDelete,
   ariaLabel,
+  cy_data,
 }: {
   teVerwijderen: string;
   handleDelete: () => void;
   ariaLabel: string;
+  cy_data: string;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -32,7 +34,11 @@ export default function DeletePopover({
       closeOnBlur={false}
     >
       <PopoverTrigger>
-        <IconButton aria-label={ariaLabel} icon={<MdDelete />} />
+        <IconButton
+          aria-label={ariaLabel}
+          icon={<MdDelete />}
+          data-cy={cy_data}
+        />
       </PopoverTrigger>
       <PopoverContent>
         <FocusLock persistentFocus={false}>
@@ -49,6 +55,7 @@ export default function DeletePopover({
             margin="4"
             marginLeft="0"
             colorScheme="red"
+            data-cy="bevestig_verwijderen"
           >
             Ja
           </Button>

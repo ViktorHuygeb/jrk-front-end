@@ -10,7 +10,7 @@ function App() {
       <ChakraProvider>
         <ActiviteitenLijst />
         <LedenLijst />
-        {/* <LeidingLijst /> */}
+        <LeidingLijst />
       </ChakraProvider>
     </>
   );
