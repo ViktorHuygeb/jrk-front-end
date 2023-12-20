@@ -9,6 +9,11 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Root from "./Root.tsx";
 import LeidingLijst from "./components/leiding/LeidingLijst.tsx";
 import LedenLijst from "./components/leden/LedenLijst.tsx";
+import { AuthProvider } from "./contexts/Auth.context.tsx";
+import Login from "./pages/Login.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
+import Logout from "./pages/Logout.tsx";
+import RegisterLeiding from "./pages/RegisterLeiding.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +31,19 @@ const router = createBrowserRouter([
       { path: "activiteiten", element: <ActiviteitenLijst /> },
       { path: "contact", element: <Contact /> },
       { path: "leiding", element: <LeidingLijst /> },
-      { path: "leden", element: <LedenLijst /> },
+      {
+        path: "leden",
+        element: <PrivateRoute />,
+        children: [
+          {
+            index: true,
+            element: <LedenLijst />,
+          },
+        ],
+      },
+      { path: "registerLeiding", element: <RegisterLeiding /> },
+      { path: "login", element: <Login /> },
+      { path: "logout", element: <Logout /> },
       { path: "*", element: <NotFound /> },
     ],
   },
@@ -34,8 +51,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ChakraProvider>
-      <RouterProvider router={router} />
-    </ChakraProvider>
+    <AuthProvider>
+      <ChakraProvider>
+        <RouterProvider router={router} />
+      </ChakraProvider>
+    </AuthProvider>
   </React.StrictMode>
 );

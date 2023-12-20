@@ -15,6 +15,8 @@ import InschrijvenModal from "./InschrijvenActiviteit";
 import DeletePopover from "../deletePopover";
 import { activiteit } from "../../types";
 import FormModal from "./FormModal";
+import { useAuth } from "../../contexts/Auth.context";
+import LoginModal from "../LoginModal";
 
 type activiteitType = activiteit & {
   onDelete: (activiteitId: number) => void;
@@ -96,6 +98,8 @@ const Activiteit = ({
   onDelete,
   setActiviteitToUpdate,
 }: activiteitType) => {
+  const { isLeiding, isAuthed } = useAuth();
+
   const {
     isOpen: isOpenInschrijving,
     onOpen: onOpenInschrijving,
@@ -119,11 +123,18 @@ const Activiteit = ({
           >
             Inschrijven
           </Button>
-          <InschrijvenModal
-            isOpen={isOpenInschrijving}
-            onClose={onCloseInschrijving}
-            activiteitId={activiteitId}
-          />
+          {isAuthed ? (
+            <InschrijvenModal
+              isOpen={isOpenInschrijving}
+              onClose={onCloseInschrijving}
+              activiteitId={activiteitId}
+            />
+          ) : (
+            <LoginModal
+              isOpen={isOpenInschrijving}
+              onClose={onCloseInschrijving}
+            />
+          )}
         </>
       );
     }
@@ -182,34 +193,40 @@ const Activiteit = ({
       </CardBody>
       <CardFooter>
         <Stack direction="row" spacing="2">
-          <IconButton
-            aria-label="Wijzig activiteit"
-            icon={<MdEdit />}
-            onClick={onOpenEdit}
-            marginRight="-2"
-          />
-          <FormModal
-            isOpen={isOpenEdit}
-            onClose={onCloseEdit}
-            type="Bewerk"
-            setActiviteitToUpdate={setActiviteitToUpdate}
-            currentActiviteit={{
-              leidingId,
-              activiteitId,
-              activiteitNaam,
-              beschrijving,
-              prijs,
-              moetInschrijven,
-              datum,
-            }}
-          />
+          {isLeiding && (
+            <>
+              <IconButton
+                aria-label="Wijzig activiteit"
+                icon={<MdEdit />}
+                onClick={onOpenEdit}
+                marginRight="-2"
+              />
+              <FormModal
+                isOpen={isOpenEdit}
+                onClose={onCloseEdit}
+                type="Bewerk"
+                setActiviteitToUpdate={setActiviteitToUpdate}
+                currentActiviteit={{
+                  leidingId,
+                  activiteitId,
+                  activiteitNaam,
+                  beschrijving,
+                  prijs,
+                  moetInschrijven,
+                  datum,
+                }}
+              />
+            </>
+          )}
           {inschrijvingsKnop(moetInschrijven)}
-          <DeletePopover
-            ariaLabel="Verwijder activiteit"
-            teVerwijderen="activiteit"
-            handleDelete={handleDelete}
-            cy_data="verwijder_activiteit"
-          />
+          {isLeiding && (
+            <DeletePopover
+              ariaLabel="Verwijder activiteit"
+              teVerwijderen="activiteit"
+              handleDelete={handleDelete}
+              cy_data="verwijder_activiteit"
+            />
+          )}
         </Stack>
       </CardFooter>
     </Card>

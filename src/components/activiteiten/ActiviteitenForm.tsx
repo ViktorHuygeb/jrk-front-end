@@ -24,6 +24,7 @@ import useSWR from "swr";
 import { getAll } from "../../api";
 import { activiteit as activiteitType, leidingType } from "../../types";
 import Error from "../Error";
+import LabelInput from "../LabelInput";
 
 type activiteitData = {
   leidingId: string;
@@ -32,13 +33,6 @@ type activiteitData = {
   beschrijving: string;
   prijsString: string;
   moetInschrijvenString: string;
-};
-
-type labelInputProps = {
-  label: string;
-  name: string;
-  type: string;
-  rest?: any;
 };
 
 const resolver: Resolver<activiteitData> = async (values) => {
@@ -105,39 +99,6 @@ const toDateInputString = (date: any) => {
   let asString = date.toISOString();
   return asString.substring(0, asString.indexOf("T"));
 };
-
-function LabelInput({ label, name, type, ...rest }: labelInputProps) {
-  const {
-    register,
-    formState: { errors, isSubmitting },
-  } = useFormContext();
-
-  const hasError = name in errors;
-  return (
-    <>
-      <div className="mb-3">
-        <FormLabel marginTop="2" htmlFor={name}>
-          {label}
-        </FormLabel>
-        <FormControl isInvalid={hasError}>
-          <Input
-            {...register(name)}
-            id={name}
-            type={type}
-            placeholder={name}
-            {...rest}
-            disabled={isSubmitting}
-          />
-          {hasError && (
-            <FormErrorMessage data-cy={`${name}_error`}>
-              {errors[name]?.message && errors[name]?.message?.toString()}
-            </FormErrorMessage>
-          )}
-        </FormControl>
-      </div>
-    </>
-  );
-}
 
 export default function ActiviteitenFrom({
   currentActiviteit,
@@ -230,9 +191,11 @@ export default function ActiviteitenFrom({
           >
             <div className="mb-3">
               <LabelInput
+                key={3}
                 label="Naam activiteit"
                 name="activiteitNaam"
                 type="text"
+                placeholder="Naam activiteit"
                 data-cy="activiteit_input"
               />
             </div>
@@ -267,8 +230,10 @@ export default function ActiviteitenFrom({
 
             <div className="mb-3">
               <LabelInput
+                key={2}
                 label="Datum:"
                 name="datumString"
+                placeholder="Datum"
                 type="date"
                 data-cy="datum_input"
               />
@@ -300,8 +265,10 @@ export default function ActiviteitenFrom({
             </div>
             <div className="mb-3">
               <LabelInput
+                key={1}
                 label="Prijs:"
                 name="prijsString"
+                placeholder="0"
                 type="number"
                 data-cy="prijs_input"
               />

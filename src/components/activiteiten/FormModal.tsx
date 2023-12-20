@@ -36,6 +36,7 @@ export default function FormModal({
           <ModalHeader paddingBottom="0">{type} een activiteit!</ModalHeader>
           <ModalCloseButton />
           <ActiviteitenFrom
+            key={300}
             currentActiviteit={currentActiviteit}
             setActiviteitToUpdate={setActiviteitToUpdate}
             onSucces={onSucces}

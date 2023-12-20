@@ -13,6 +13,7 @@ export default function LeidingLijst() {
       justifyContent={"center"}
       templateColumns="repeat(4, 350px)"
       padding="20px"
+      key={201}
     >
       {leiding.map((l: leidingType) => {
         return (

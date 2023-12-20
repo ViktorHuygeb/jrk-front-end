@@ -1,6 +1,18 @@
-import axios from "axios";
+import axiosRoot from "axios";
 
 const baseURL = `http://localhost:9000/api`;
+
+export const axios = axiosRoot.create({
+  baseURL: baseURL,
+});
+
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    axios.defaults.headers["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers["Authorization"];
+  }
+};
 
 export const getAll = async (url: string) => {
   const { data } = await axios.get(`${baseURL}/${url}`);
@@ -33,4 +45,10 @@ export const save = async (
     url: `${baseURL}/${url}/${arg.id ?? ""}`,
     data: arg.body,
   });
+};
+
+export const post = async (url: string, { arg }: any) => {
+  const { data } = await axios.post(url, arg);
+  console.log(data);
+  return data;
 };

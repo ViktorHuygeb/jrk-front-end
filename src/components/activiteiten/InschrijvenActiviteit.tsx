@@ -52,14 +52,24 @@ export default function InschrijvenModal({
 
   const onSubmit: SubmitHandler<InschrijvingenType> = useCallback(
     async (data) => {
-      data.ingeschrevenLidId.forEach(async (lidId: number) => {
+      if (data.ingeschrevenLidId.length > 1) {
+        data.ingeschrevenLidId.forEach(async (lidId: number) => {
+          await saveInschrijving({
+            body: {
+              activiteitId: activiteitId,
+              lidId: parseInt(lidId.toString()),
+            },
+          });
+        });
+      } else if (data.ingeschrevenLidId.length === 1) {
         await saveInschrijving({
           body: {
-            activiteitId: activiteitId,
-            lidId: parseInt(lidId.toString()),
+            activiteitId: parseInt(activiteitId.toString()),
+            lidId: parseInt(data.ingeschrevenLidId.toString()),
           },
         });
-      });
+      } else {
+      }
       methods.reset();
     },
     [methods.reset]

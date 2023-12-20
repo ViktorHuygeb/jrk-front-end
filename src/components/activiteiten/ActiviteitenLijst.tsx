@@ -8,8 +8,11 @@ import { getAll, deleteById } from "../../api";
 import useSWRMutation from "swr/mutation";
 import { FaPlus } from "react-icons/fa";
 import FormModal from "./FormModal";
+import { useAuth } from "../../contexts/Auth.context";
 
 const ActiviteitenLijst = () => {
+  const { isLeiding } = useAuth();
+
   const {
     data: activiteiten = [],
     isLoading,
@@ -45,24 +48,28 @@ const ActiviteitenLijst = () => {
       >
         {!error ? (
           <>
-            <IconButton
-              zIndex={1000}
-              aria-label="Maak een activiteitknop"
-              position="fixed"
-              colorScheme="red"
-              top="75px"
-              right="30px"
-              onClick={onOpen}
-              icon={<FaPlus />}
-              data-cy="maak_activiteit"
-            />
-            <FormModal
-              type="Maak"
-              isOpen={isOpen}
-              onClose={onClose}
-              currentActiviteit={currentActiviteit}
-              setActiviteitToUpdate={setActiviteitToUpdate}
-            />
+            {isLeiding && (
+              <>
+                <IconButton
+                  zIndex={1000}
+                  aria-label="Maak een activiteitknop"
+                  position="fixed"
+                  colorScheme="red"
+                  top="75px"
+                  right="30px"
+                  onClick={onOpen}
+                  icon={<FaPlus />}
+                  data-cy="maak_activiteit"
+                />
+                <FormModal
+                  type="Maak"
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  currentActiviteit={currentActiviteit}
+                  setActiviteitToUpdate={setActiviteitToUpdate}
+                />
+              </>
+            )}
             <SimpleGrid
               justifyContent={"center"}
               spacing={3}
