@@ -4,6 +4,7 @@ import DeletePopover from "../deletePopover";
 import useSWR from "swr";
 import { getAll } from "../../api";
 import { useCallback } from "react";
+import Error from "../Error";
 
 type lidProps = lidType & {
   onActiviteit: boolean;
@@ -34,31 +35,38 @@ export default function Lid({
   }, [lidId, activiteitId, onDelete]);
 
   return (
-    <Tr data-cy="lid">
-      <Td data-cy="lid_voorNaam">{voorNaam}</Td>
-      <Td data-cy="lid_familieNaam">{familieNaam}</Td>
-      <Td data-cy="lid_geboortedatum">{toDateOutputString(geboortedatum)}</Td>
-      <Td data-cy="lid_fotos">{magFotos ? "Ja" : "Nee"}</Td>
-      <Td data-cy="lid_ouder_email">
-        {ouders
-          .filter((ouder: ouderType) => ouderId === ouder.ouderId)
-          .map((ouder: ouderType) => ouder.email)}
-      </Td>
-      <Td data-cy="lid_ouder_telefoonNummer">
-        {ouders
-          .filter((ouder: ouderType) => ouderId === ouder.ouderId)
-          .map((ouder: ouderType) => ouder.telefoonNummer)}
-      </Td>
-      {onActiviteit && (
-        <Td>
-          <DeletePopover
-            teVerwijderen="inschrijving"
-            ariaLabel="Verwijder inschrijving"
-            handleDelete={handleDelete}
-            cy_data="verwijder_inschrijving"
-          />
+    <>
+      <Error error={error} />
+      <Tr data-cy="lid">
+        <Td data-cy="lid_voorNaam">{voorNaam}</Td>
+        <Td data-cy="lid_familieNaam">{familieNaam}</Td>
+        <Td data-cy="lid_geboortedatum">{toDateOutputString(geboortedatum)}</Td>
+        <Td data-cy="lid_fotos">{magFotos ? "Ja" : "Nee"}</Td>
+        <Td data-cy="lid_ouder_email">
+          {!isLoading
+            ? ouders
+                .filter((ouder: ouderType) => ouderId === ouder.ouderId)
+                .map((ouder: ouderType) => ouder.email)
+            : "Ouders aan het laden"}
         </Td>
-      )}
-    </Tr>
+        <Td data-cy="lid_ouder_telefoonNummer">
+          {!isLoading
+            ? ouders
+                .filter((ouder: ouderType) => ouderId === ouder.ouderId)
+                .map((ouder: ouderType) => ouder.telefoonNummer)
+            : "Ouders aan het laden"}
+        </Td>
+        {onActiviteit && (
+          <Td>
+            <DeletePopover
+              teVerwijderen="inschrijving"
+              ariaLabel="Verwijder inschrijving"
+              handleDelete={handleDelete}
+              cy_data="verwijder_inschrijving"
+            />
+          </Td>
+        )}
+      </Tr>
+    </>
   );
 }

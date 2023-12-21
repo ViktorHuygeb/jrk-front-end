@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: any) => {
   const [token, setToken] = useState(localStorage.getItem(JWT_TOKEN_KEY));
   const [user, setUser] = useState(null);
   const [isAuthed, setIsAuthed] = useState(false);
-  const [roles, setRoles] = useState(null);
+  const [userRoles, setRoles] = useState(null);
 
   const {
     isMutating: loading,
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }: any) => {
 
         localStorage.setItem(JWT_TOKEN_KEY, token);
         localStorage.setItem(USER_ID_KEY, userId);
-        localStorage.setItem(USER_ROLES, JSON.stringify(roles));
+        localStorage.setItem(USER_ROLES, JSON.stringify(userRoles));
 
         return true;
       } catch (error) {

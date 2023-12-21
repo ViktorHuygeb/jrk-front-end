@@ -1,20 +1,10 @@
 import { FormProvider, Resolver, useForm } from "react-hook-form";
 import LabelInput from "../components/LabelInput";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/Auth.context";
 import Error from "../components/Error";
-import {
-  Flex,
-  Heading,
-  Button,
-  Stack,
-  chakra,
-  Box,
-  Link,
-  Avatar,
-} from "@chakra-ui/react";
-import { FaUserAlt, FaLock } from "react-icons/fa";
+import { Flex, Heading, Button, Stack, Box, Avatar } from "@chakra-ui/react";
 
 type inlogData = {
   email: string;
@@ -41,14 +31,10 @@ const resolver: Resolver<inlogData> = async (values) => {
   };
 };
 
-const CFaUserAlt = chakra(FaUserAlt);
-const CFaLock = chakra(FaLock);
-
 export default function Login() {
   const { error, loading, login } = useAuth();
   const navigate = useNavigate();
   const { search } = useLocation();
-  const [showPassword, setShowPassword] = useState(false);
 
   const redirect = useMemo(() => {
     const urlParams = new URLSearchParams(search);
@@ -61,8 +47,6 @@ export default function Login() {
   const methods = useForm<inlogData>({
     resolver,
   });
-
-  const handleShowPassword = () => setShowPassword(!showPassword);
 
   const { handleSubmit, reset } = methods;
 

@@ -1,5 +1,4 @@
 import { Outlet, NavLink, ScrollRestoration } from "react-router-dom";
-import { useMemo } from "react";
 import { useAuth } from "../contexts/Auth.context";
 
 export default function Navbar() {

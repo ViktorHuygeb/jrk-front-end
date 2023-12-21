@@ -14,11 +14,9 @@ import { useNavigate } from "react-router-dom";
 export default function InschrijvenModal({
   isOpen,
   onClose,
-  activiteitId,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  activiteitId: number;
 }) {
   const navigate = useNavigate();
 

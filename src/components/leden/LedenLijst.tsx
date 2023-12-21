@@ -121,7 +121,7 @@ export default function LedenLijst() {
       <Box width="70%">
         <AsyncData
           loading={isLoading || isLoadingAct || isLoadingIns}
-          error={error || errorAct || errorIns}
+          error={error || errorAct || errorIns || deleteError}
         >
           <Table>
             <Thead>
