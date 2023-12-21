@@ -22,8 +22,7 @@ Ik verwacht dat volgende software reeds geïnstalleerd is:
 1. `.env` bestand aanmaken
    - VITE_API_URL="http://localhost:9000/api"
 2. `yarn init`
-3. `yarn add koa`
-4. `yarn dev`
+3. `yarn dev`
 
 ## Testen
 
