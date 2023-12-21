@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }: any) => {
   const [token, setToken] = useState(localStorage.getItem(JWT_TOKEN_KEY));
   const [user, setUser] = useState(null);
   const [isAuthed, setIsAuthed] = useState(false);
-  const [userRoles, setRoles] = useState(null);
 
   const {
     isMutating: loading,
@@ -92,11 +91,10 @@ export const AuthProvider = ({ children }: any) => {
 
         setToken(token);
         setUser(user);
-        setRoles(roles);
 
         localStorage.setItem(JWT_TOKEN_KEY, token);
         localStorage.setItem(USER_ID_KEY, userId);
-        localStorage.setItem(USER_ROLES, JSON.stringify(userRoles));
+        localStorage.setItem(USER_ROLES, JSON.stringify(roles));
 
         return true;
       } catch (error) {
@@ -110,7 +108,6 @@ export const AuthProvider = ({ children }: any) => {
   const logout = useCallback(() => {
     setToken(null);
     setUser(null);
-    setRoles(null);
     setIsLeiding(false);
 
     localStorage.removeItem(JWT_TOKEN_KEY);
@@ -127,7 +124,6 @@ export const AuthProvider = ({ children }: any) => {
 
         setToken(token);
         setUser(leidingId);
-        setRoles(roles);
 
         localStorage.setItem(JWT_TOKEN_KEY, token);
         localStorage.setItem(USER_ID_KEY, leidingId);
