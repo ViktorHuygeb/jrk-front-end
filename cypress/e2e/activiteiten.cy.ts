@@ -12,7 +12,7 @@ describe("activiteitenList", () => {
   it("should show a loading indicator for a very slow response", () => {
     cy.intercept("GET", "http://localhost:9000/api/activiteiten", (req) => {
       req.on("response", (res) => {
-        res.setDelay(10000);
+        res.setDelay(1000);
       });
     }).as("slowResponse");
 

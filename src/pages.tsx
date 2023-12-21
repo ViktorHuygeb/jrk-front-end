@@ -1,5 +1,5 @@
 import { LoremIpsum } from "react-lorem-ipsum";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export const Home = () => {
   return (

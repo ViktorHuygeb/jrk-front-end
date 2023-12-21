@@ -1,6 +1,6 @@
 import axiosRoot from "axios";
 
-const baseURL = `http://localhost:9000/api`;
+const baseURL = import.meta.env.VITE_API_URL as string;
 
 export const axios = axiosRoot.create({
   baseURL: baseURL,
@@ -40,6 +40,7 @@ export const save = async (
   url: string,
   { arg }: { arg: { id?: number; body: any } }
 ) => {
+  console.log(arg.body);
   await axios({
     method: arg.id ? "PUT" : "POST",
     url: `${baseURL}/${url}/${arg.id ?? ""}`,

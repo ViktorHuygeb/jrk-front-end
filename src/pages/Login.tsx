@@ -119,6 +119,7 @@ export default function Login() {
                   type="text"
                   name="email"
                   placeholder="your@email.com"
+                  data-cy="email_input"
                 />
 
                 <LabelInput
@@ -126,6 +127,7 @@ export default function Login() {
                   placeholder="Wachtwoord"
                   type="password"
                   name="password"
+                  data-cy="password_input"
                 />
 
                 <div className="clearfix">
@@ -135,6 +137,7 @@ export default function Login() {
                       disabled={loading}
                       colorScheme="red"
                       marginRight="10px"
+                      data-cy="login_button"
                     >
                       Sign in
                     </Button>

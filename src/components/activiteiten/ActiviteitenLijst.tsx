@@ -11,8 +11,6 @@ import FormModal from "./FormModal";
 import { useAuth } from "../../contexts/Auth.context";
 
 const ActiviteitenLijst = () => {
-  const { isLeiding } = useAuth();
-
   const {
     data: activiteiten = [],
     isLoading,
@@ -39,6 +37,8 @@ const ActiviteitenLijst = () => {
     "activiteiten",
     deleteById
   );
+
+  const { isLeiding } = useAuth();
 
   return (
     <Box className="content">

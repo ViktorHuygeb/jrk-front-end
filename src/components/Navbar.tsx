@@ -13,11 +13,15 @@ export default function Navbar() {
             <NavLink to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink to="activiteiten">Activiteiten</NavLink>
+            <NavLink to="activiteiten" data-cy="activiteiten">
+              Activiteiten
+            </NavLink>
           </li>
           {isLeiding && (
             <li>
-              <NavLink to="leden">Leden</NavLink>
+              <NavLink to="leden" data-cy="leden">
+                Leden
+              </NavLink>
             </li>
           )}
           <div id="logo">Jeugd Rode Kruis</div>
@@ -33,9 +37,14 @@ export default function Navbar() {
               <NavLink to="/logout">Logout</NavLink>
             </li>
           ) : (
-            <li>
-              <NavLink to="/login">Login</NavLink>
-            </li>
+            <>
+              <li>
+                <NavLink to="/login">Login</NavLink>
+              </li>
+              <li>
+                <NavLink to="/registerLeiding">Register</NavLink>
+              </li>
+            </>
           )}
         </ul>
       </nav>

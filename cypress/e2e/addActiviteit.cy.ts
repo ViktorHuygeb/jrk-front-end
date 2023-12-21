@@ -1,8 +1,11 @@
 describe("Toevoegen activiteit", () => {
+  beforeEach(() => {
+    cy.login("viktorhuygebaert04@gmail.com", "12345678");
+  });
+
   it("Adds activiteit", () => {
     cy.visit("http://localhost:5173/activiteiten");
     cy.get("[data-cy=maak_activiteit]").click();
-
     cy.get("[data-cy=activiteit_input]").type("Test activiteit");
     cy.get("[data-cy=leiding_input]").select("Viktor");
     cy.get("[data-cy=datum_input]").type("2024-05-05");
