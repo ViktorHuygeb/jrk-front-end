@@ -15,14 +15,16 @@ Ik verwacht dat volgende software reeds geïnstalleerd is:
 - [NodeJS](https://nodejs.org)
 - [Yarn](https://yarnpkg.com)
 - [MySQL Community Server](https://dev.mysql.com/downloads/mysql/)
-- ...
-
-> Vul eventueel aan
+- [Typescript](https://www.typescriptlang.org/download)
 
 ## Opstarten
 
-> Schrijf hier hoe we de applicatie starten (.env bestanden aanmaken, commando's om uit te voeren...)
+1. `.env` bestand aanmaken
+   - VITE_API_URL="http://localhost:9000/api"
+2. `yarn init`
+3. `yarn add koa`
+4. `yarn dev`
 
 ## Testen
 
-> Schrijf hier hoe we de testen uitvoeren (.env bestanden aanmaken, commando's om uit te voeren...)
+1. `yarn test`
