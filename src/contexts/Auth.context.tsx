@@ -89,6 +89,8 @@ export const AuthProvider = ({ children }: any) => {
           userId = ouder.ouderId;
         }
 
+        console.log(loginData);
+
         setToken(token);
         setUser(user);
 
